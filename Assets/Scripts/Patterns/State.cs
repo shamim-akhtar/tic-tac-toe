@@ -20,7 +20,7 @@ using UnityEngine;
 /// 
 
 
-namespace GMAI
+namespace Patterns
 {
     // we create the state class.
     public class State

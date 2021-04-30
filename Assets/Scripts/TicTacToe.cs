@@ -30,6 +30,8 @@ namespace GMAI
         };
         private char computer = 'x', player = 'o';
 
+        public int WinID = -1; // 0 == up row 1 = middle row and so on
+
         public TicTacToe()
         {
         }
@@ -193,18 +195,25 @@ namespace GMAI
                     mBoard[i, j] = ' ';
                 }
             }
+            WinID = -1;
         }
         private bool DiagonalCrossed(char[,] board)
         {
             if (board[0, 0] == board[1, 1] &&
                 board[1, 1] == board[2, 2] &&
                 board[0, 0] != ' ')
+            {
+                WinID = 7;
                 return (true);
+            }
 
             if (board[0, 2] == board[1, 1] &&
                 board[1, 1] == board[2, 0] &&
                 board[0, 2] != ' ')
+            {
+                WinID = 6;
                 return (true);
+            }
 
             return (false);
         }
@@ -212,10 +221,13 @@ namespace GMAI
         {
             for (int i = 0; i < 3; i++)
             {
-                if (board[i,0] == board[i,1] &&
-                    board[i,1] == board[i,2] &&
-                    board[i,0] != ' ')
+                if (board[i, 0] == board[i, 1] &&
+                    board[i, 1] == board[i, 2] &&
+                    board[i, 0] != ' ')
+                {
+                    WinID = i;
                     return (true);
+                }
             }
             return (false);
         }
@@ -224,10 +236,13 @@ namespace GMAI
         {
             for (int i = 0; i < 3; i++)
             {
-                if (board[0,i] == board[1,i] &&
-                    board[1,i] == board[2,i] &&
-                    board[0,i] != ' ')
+                if (board[0, i] == board[1, i] &&
+                    board[1, i] == board[2, i] &&
+                    board[0, i] != ' ')
+                {
+                    WinID = 3 + i;
                     return (true);
+                }
             }
             return (false);
         }

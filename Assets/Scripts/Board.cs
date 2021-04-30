@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Patterns;
 using GMAI;
 using UnityEngine.UI;
-using TMPro;
+using UnityEngine.SceneManagement;
 
 public enum StateTypes
 {
@@ -24,7 +25,11 @@ public class StatePlayAI : State
         ID = (int)StateTypes.AI_PLAY;
         Name = "StatePlayAI";
         mBoard = board;
+
+        int index = Random.Range(0, GameApp.Instance.mAudioClips.Length - 1);
+        GameApp.Instance.mAmbientSound.Play(GameApp.Instance.mAudioClips[index], 0.8f);
     }
+
     override public void Enter()
     {
         base.Enter();
@@ -192,7 +197,7 @@ public class StateNewGame : State
     private bool mStartTurn = true; // player makes the first move.
 
     private Board mBoard;
-    private float mWaitTime = 1.0f;
+    private float mWaitTime = 0.1f;
     private float dt = 0.0f;
 
     public StateNewGame(Board board) : base()
@@ -245,6 +250,15 @@ public class Board : MonoBehaviour
     int mAIScore = 0;
     [SerializeField] private float timeMultiplier = 1.0f;
     public FiniteStateMachine mFSM = new FiniteStateMachine();
+
+    public AudioSource mAudioSource;
+    public AudioClip mWinPlayer;
+    public AudioClip mWinAI;
+    public AudioClip mDraw;
+    public AudioClip mClick;
+    public AudioClip mCancel;
+
+    public GameObject[] mLines;
 
     void Start()
     {
@@ -316,9 +330,11 @@ public class Board : MonoBehaviour
         PlayerScore.text = mPlayerScore.ToString();
         WinText.text = "Player Wins";
         //show line
+        mLines[tt.WinID].SetActive(true);
 
         mPlayBtn.gameObject.SetActive(true);
         StartCoroutine(FadeInText(2.0f, WinText));
+        mAudioSource.PlayOneShot(mWinPlayer);
     }
 
     public void PlayerWin()
@@ -333,8 +349,10 @@ public class Board : MonoBehaviour
         AIScore.text = mAIScore.ToString();
         WinText.text = "AI Wins";
         //show line
+        mLines[tt.WinID].SetActive(true);
         mPlayBtn.gameObject.SetActive(true);
         StartCoroutine(FadeInText(2.0f, WinText));
+        mAudioSource.PlayOneShot(mWinAI);
     }
 
     public void AIWin()
@@ -353,6 +371,7 @@ public class Board : MonoBehaviour
 
         mPlayBtn.gameObject.SetActive(true);
         StartCoroutine(FadeInText(2.0f, WinText));
+        mAudioSource.PlayOneShot(mDraw);
     }
     public void Draw()
     {
@@ -372,6 +391,11 @@ public class Board : MonoBehaviour
         mFSM.SetCurrentState((int)StateTypes.NEW_GAME);
         mPlayBtn.gameObject.SetActive(false);
         StartCoroutine(FadeOutText(2.0f, WinText));
+
+        for (int i = 0; i < 8; ++i)
+        {
+            mLines[i].SetActive(false);
+        }
     }
     public void Reset()
     {
@@ -388,8 +412,11 @@ public class Board : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
             if (hit.collider != null)
             {
+                mAudioSource.PlayOneShot(mClick);
                 return hit.collider.gameObject.GetComponent<Cell>();
             }
+
+            mAudioSource.PlayOneShot(mCancel);
         }
         return null;
     }
@@ -410,7 +437,8 @@ public class Board : MonoBehaviour
 
     public bool IsGameOver()
     {
-        return tt.IsGameOver();
+        bool flag = tt.IsGameOver();
+        return flag;
     }
 
     public bool IsGameDraw()
@@ -420,6 +448,7 @@ public class Board : MonoBehaviour
 
     public void OnClickPlay()
     {
+        mAudioSource.PlayOneShot(mClick);
         mFSM.SetCurrentState((int)StateTypes.RESET);
     }
 }

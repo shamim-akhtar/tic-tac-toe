@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace GMAI
+namespace Patterns
 {
 
     public class FiniteStateMachine
@@ -46,6 +46,11 @@ namespace GMAI
         {
             State state = mStates[stateID];
             SetCurrentState(state);
+        }
+
+        public State GetCurrentState()
+        {
+            return mCurrentState;
         }
 
         public void SetCurrentState(State state)
