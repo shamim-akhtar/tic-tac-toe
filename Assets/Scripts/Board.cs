@@ -79,17 +79,6 @@ public class StatePlayPlayer : State
         if(cell && !cell.Used())
         {
             mBoard.SetPlayerMove(cell.GetRowIndex(), cell.GetColIndex());
-
-            if (mBoard.IsGameOver())
-            {
-                mBoard.mFSM.SetCurrentState((int)StateTypes.PLAYER_WIN);
-            }
-            else if(mBoard.IsGameDraw())
-            {
-                mBoard.mFSM.SetCurrentState((int)StateTypes.DRAW);
-            }
-            else
-                mBoard.mFSM.SetCurrentState((int)StateTypes.AI_PLAY);
         }
     }
 }
@@ -421,10 +410,45 @@ public class Board : MonoBehaviour
         return null;
     }
 
+    IEnumerator Coroutine_OnMakeMove(float t, int r, int c, bool is_computer)
+    {
+        mCells[r * 3 + c].Activate(is_computer);
+        float dt = 0.0f;
+        while(dt <= t)
+        {
+            float scale = dt / t;
+            mCells[r * 3 + c].SetScale(is_computer, scale);
+            Debug.Log(scale);
+            dt += Time.deltaTime;
+            yield return new WaitForSeconds(0.01f);
+        }
+    }
+
+    IEnumerator Coroutine_WaitBeforeAIMove(float t)
+    {
+        yield return new WaitForSeconds(t);
+
+        if (IsGameOver())
+        {
+            mFSM.SetCurrentState((int)StateTypes.PLAYER_WIN);
+        }
+        else if (IsGameDraw())
+        {
+            mFSM.SetCurrentState((int)StateTypes.DRAW);
+        }
+        else
+        {
+            mFSM.SetCurrentState((int)StateTypes.AI_PLAY);
+        }
+    }
+
     public void SetPlayerMove(int r, int c)
     {
         tt.SetMove(r, c, false);
-        mCells[r * 3 + c].Activate(false);
+        //mCells[r * 3 + c].Activate(false);
+        StartCoroutine(Coroutine_OnMakeMove(0.2f, r, c, false));
+        //mCells[r * 3 + c].SetScale(false, 0.2f);
+        StartCoroutine(Coroutine_WaitBeforeAIMove(0.5f));
     }
 
     public void SetAIMove()
@@ -432,7 +456,8 @@ public class Board : MonoBehaviour
         CellIndex bestMove = tt.FindNextMove();
 
         tt.SetMove(bestMove.Row, bestMove.Col, true);
-        mCells[bestMove.Row * 3 + bestMove.Col].Activate(true);
+        //mCells[bestMove.Row * 3 + bestMove.Col].Activate(true);
+        StartCoroutine(Coroutine_OnMakeMove(0.2f, bestMove.Row, bestMove.Col, true));
     }
 
     public bool IsGameOver()

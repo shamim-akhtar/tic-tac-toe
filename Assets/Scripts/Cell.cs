@@ -55,4 +55,12 @@ public class Cell : MonoBehaviour
         transform.GetChild(0).gameObject.SetActive(false);
         transform.GetChild(1).gameObject.SetActive(false);
     }
+
+    public void SetScale(bool is_computer, float s)
+    {
+        if(is_computer)
+            transform.GetChild(0).localScale = new Vector3(s, s, s);
+        else
+            transform.GetChild(1).localScale = new Vector3(s, s, s);
+    }
 }

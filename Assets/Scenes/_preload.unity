@@ -171,16 +171,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mAmbientSound: {fileID: 473031221}
   mAudioClips:
-  - {fileID: 8300000, guid: 76a21726a57e30f47882c126b0a47484, type: 3}
-  - {fileID: 8300000, guid: 0efbb4d3714b42b42ac9072e193b9b1f, type: 3}
   - {fileID: 8300000, guid: 696d2eb82b8e42e4092e9e442a71f9bc, type: 3}
-  - {fileID: 8300000, guid: fd66d9fd29b253940b0c65dd2af1ef95, type: 3}
-  - {fileID: 8300000, guid: 5066556fde71af846b7d71361355c2c5, type: 3}
-  - {fileID: 8300000, guid: cc25c371ee26cb745840d9f58324b327, type: 3}
-  - {fileID: 8300000, guid: 3e3decfc558754048b5b736e237bfa21, type: 3}
-  - {fileID: 8300000, guid: 83e3e30d9013821418efe5a55b8bbcef, type: 3}
-  - {fileID: 8300000, guid: 8961a31f82bdf14449ccfd601d20f020, type: 3}
-  - {fileID: 8300000, guid: 30179446414bb9545b0f761bcfce3566, type: 3}
 --- !u!82 &473031219
 AudioSource:
   m_ObjectHideFlags: 0

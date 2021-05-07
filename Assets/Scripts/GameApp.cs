@@ -19,14 +19,14 @@ public class GameApp : Singleton<GameApp>
     }    // called first
     void OnEnable()
     {
-        Debug.Log("OnEnable called");
+        //Debug.Log("OnEnable called");
         //SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     // called when the game terminates
     void OnDisable()
     {
-        Debug.Log("OnDisable");
+        //Debug.Log("OnDisable");
         //SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }
